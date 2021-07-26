@@ -92,7 +92,7 @@ function App() {
     console.log("currentBlock", currentBlock);
     console.log("logs", tempLogs.length);
 
-    const decodedEvents = tempLogs.map((log) => iface.parseLog(log));
+    const decodedEvents = tempLogs.map((log, i) => iface.parseLog(log));
 
     decodedEvents.forEach((e, i) => {
       const sender = e.args[0];
@@ -117,6 +117,19 @@ function App() {
       if (recipient === "0x0000000000000000000000000000000000000000") {
         console.log("BurntFrom", sender);
         console.log("Amount", amount);
+        let burnts = burners.get(sender)
+        if(burnts===undefined){
+          burnts = 1
+          burners.set(sender,burnts)
+        }
+        else{
+          burnts = burnts+1
+          burners.set(sender,burnts)
+        }
+
+        console.log("burnts", burnts)
+        console.log("tempLogs", tempLogs[i])
+        console.log("burntTransactionHash", tempLogs[i].transactionHash)
       }
     });
   }
